@@ -1,0 +1,156 @@
+[
+  {
+    "movieID": 1,
+    "title": "Inception",
+    "language": "English",
+    "duration": 148,
+    "releaseYear": 2010,
+    "movieType": "ACTOR_BASED",
+    "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR42MpsAgrw1dBlvBlxBml22hYBfQ541eeI6GL4f3IJUmXEA4TKs1ZNw0sGD2cQs6PgGjdDKA&s=10",
+    "rating": "8.8/10",
+    "votes": "2.3M+"
+  },
+  {
+    "movieID": 2,
+    "title": "Spider-Man: Across the Spider-Verse",
+    "language": "English",
+    "duration": 140,
+    "releaseYear": 2023,
+    "movieType": "ANIMATED",
+    "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaiJEQM8cI7oNhbn6_rsX2PJFvFYBcxuN4_jBrwbyZyN_O-qaz",
+    "rating": "8.9/10",
+    "votes": "412K+"
+  },
+  {
+    "movieID": 3,
+    "title": "Our Planet",
+    "language": "English",
+    "duration": 50,
+    "releaseYear": 2019,
+    "movieType": "DOCUMENTARY",
+    "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7kNGalp4lQdIAHxSgqx5SwuyDOdMzHPF-WQPvNUOY53v1LWTUNb0R6RJpkRHP2YUOdnbZ&s=10",
+    "rating": "9.3/10",
+    "votes": "68K+"
+  },
+  {
+    "movieID": 4,
+    "title": "Interstellar",
+    "language": "English",
+    "duration": 169,
+    "releaseYear": 2014,
+    "movieType": "ACTOR_BASED",
+    "poster": "https://pictures.abebooks.com/isbn/9781783293698-us.jpg",
+    "rating": "8.7/10",
+    "votes": "1.9M+"
+  },
+  {
+    "movieID": 5,
+    "title": "The Dark Knight",
+    "language": "English",
+    "duration": 152,
+    "releaseYear": 2008,
+    "movieType": "ACTOR_BASED",
+    "poster": "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+    "rating": "9.0/10",
+    "votes": "2.7M+"
+  },
+  {
+    "movieID": 6,
+    "title": "The Lion King",
+    "language": "English",
+    "duration": 118,
+    "releaseYear": 1994,
+    "movieType": "ANIMATED",
+    "poster": "https://upload.wikimedia.org/wikipedia/en/9/9d/Disney_The_Lion_King_2019.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+    "rating": "8.5/10",
+    "votes": "980K+"
+  },
+  {
+    "movieID": 7,
+    "title": "Free Solo",
+    "language": "English",
+    "duration": 100,
+    "releaseYear": 2018,
+    "movieType": "DOCUMENTARY",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNWNmMjExZDktY2Q5Ni00MjNiLTgzZTgtNmRiMGYxZTI3MWQxXkEyXkFqcGc@._V1_.jpg",
+    "rating": "8.2/10",
+    "votes": "45K+"
+  },
+  {
+    "movieID": 8,
+    "title": "Oppenheimer",
+    "language": "English",
+    "duration": 180,
+    "releaseYear": 2023,
+    "movieType": "ACTOR_BASED",
+    "poster": "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg",
+    "rating": "8.6/10",
+    "votes": "890K+"
+  },
+  {
+    "movieID": 9,
+    "title": "3 Idiots",
+    "language": "Hindi",
+    "duration": 170,
+    "releaseYear": 2009,
+    "movieType": "DRAMA",
+    "poster": "assets/posters/poster-3-idiots.jpg",
+    "rating": "8.4/10",
+    "votes": "450K+"
+  },
+  {
+    "movieID": 10,
+    "title": "Dangal",
+    "language": "Hindi",
+    "duration": 161,
+    "releaseYear": 2016,
+    "movieType": "SPORTS_DRAMA",
+    "poster": "assets/posters/poster-dangal.jpg",
+    "rating": "8.3/10",
+    "votes": "300K+"
+  },
+  {
+    "movieID": 11,
+    "title": "Zindagi Na Milegi Dobara",
+    "language": "Hindi",
+    "duration": 155,
+    "releaseYear": 2011,
+    "movieType": "ADVENTURE_DRAMA",
+    "poster": "assets/posters/poster-znmd.jpg",
+    "rating": "8.2/10",
+    "votes": "210K+"
+  },
+  {
+    "movieID": 12,
+    "title": "Vikram",
+    "language": "Tamil",
+    "duration": 174,
+    "releaseYear": 2022,
+    "movieType": "ACTION_THRILLER",
+    "poster": "assets/posters/poster-vikram.jpg",
+    "rating": "8.3/10",
+    "votes": "180K+"
+  },
+  {
+    "movieID": 13,
+    "title": "Jai Bhim",
+    "language": "Tamil",
+    "duration": 164,
+    "releaseYear": 2021,
+    "movieType": "LEGAL_DRAMA",
+    "poster": "assets/posters/poster-jai-bhim.jpg",
+    "rating": "9.0/10",
+    "votes": "145K+"
+  },
+  {
+    "movieID": 14,
+    "title": "Kaithi",
+    "language": "Tamil",
+    "duration": 145,
+    "releaseYear": 2019,
+    "movieType": "ACTION_THRILLER",
+    "poster": "assets/posters/poster-kaithi.jpg",
+    "rating": "8.4/10",
+    "votes": "125K+"
+  }
+]

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket Booking System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo">
+            <h1>Cinema<span>Booking</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" id="navMovies" class="active">Movies</a></li>
+                <li><a href="#" id="navBookings">My Bookings</a></li>
+            </ul>
+        </nav>
+        <div class="account-actions">
+            <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch colour theme" aria-pressed="false">
+                <span id="themeIcon">☾</span><span id="themeLabel">Dark</span>
+            </button>
+            <button id="profileBtn" class="profile-btn" type="button" aria-label="Open my profile">
+                <span id="profileAvatar">U</span>
+                <span id="profileName">My Profile</span>
+            </button>
+            <button id="signInBtn" class="sign-in-btn" type="button">Sign in</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        <!-- Movies page -->
+        <div id="moviesPage">
+
+            <!-- Search & Filter Section -->
+            <section class="filter-section">
+                <h2>Now Showing</h2>
+                <div class="filter-controls">
+                    <input type="text" id="searchInput" placeholder="Search by movie title...">
+                    <select id="languageFilter">
+                        <option value="ALL">All Languages</option>
+                        <!-- Other options are generated from the movie data in app.js -->
+                    </select>
+                    <select id="typeFilter">
+                        <option value="ALL">All Types</option>
+                        <!-- Other options are generated from the movie data in app.js -->
+                    </select>
+                </div>
+            </section>
+
+            <!-- Movie Catalog Row -->
+            <div class="movie-row-wrap">
+                <button class="scroll-arrow prev" data-target="movies" aria-label="Scroll left">&#8249;</button>
+                <section id="movies" class="movie-grid">
+                    <!-- Dynamically populated via app.js -->
+                    <p class="loading-text">Loading movies...</p>
+                </section>
+                <button class="scroll-arrow next" data-target="movies" aria-label="Scroll right">&#8250;</button>
+            </div>
+
+            <!-- Recommended For You (content-based on booking history, falls back to top-rated) -->
+            <section class="movie-row-section">
+                <h2 class="row-title">Recommended For You</h2>
+                <div class="movie-row-wrap">
+                    <button class="scroll-arrow prev" data-target="recommendedGrid" aria-label="Scroll left">&#8249;</button>
+                    <div id="recommendedGrid" class="movie-grid">
+                        <p class="loading-text">Loading recommendations...</p>
+                    </div>
+                    <button class="scroll-arrow next" data-target="recommendedGrid" aria-label="Scroll right">&#8250;</button>
+                </div>
+            </section>
+
+            <!-- Popular Now (ranked by vote count) -->
+            <section class="movie-row-section">
+                <h2 class="row-title">Popular Now</h2>
+                <div class="movie-row-wrap">
+                    <button class="scroll-arrow prev" data-target="popularGrid" aria-label="Scroll left">&#8249;</button>
+                    <div id="popularGrid" class="movie-grid">
+                        <p class="loading-text">Loading...</p>
+                    </div>
+                    <button class="scroll-arrow next" data-target="popularGrid" aria-label="Scroll right">&#8250;</button>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- My Bookings page -->
+        <div id="my-bookings" class="hidden">
+            <section class="filter-section">
+                <h2>My Bookings</h2>
+            </section>
+            <section id="bookingsList">
+                <p class="loading-text">You have no bookings yet.</p>
+            </section>
+        </div>
+
+        <!-- Showtime & Seat Selection Modal -->
+        <section id="bookingModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalMovieTitle">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeBookingModal()">&times;</span>
+                <h2 id="modalMovieTitle">Select Showtime & Seats</h2>
+
+                <!-- Date Picker (for advance booking) -->
+                <div class="date-selection">
+                    <h3>Select date</h3>
+                    <div id="dateList" class="date-buttons">
+                        <!-- Populated dynamically: today + next few days -->
+                    </div>
+                </div>
+
+                <!-- Showtimes Container -->
+                <div class="showtime-selection">
+                    <h3>Available Showtimes</h3>
+                    <div id="showtimeList" class="showtime-buttons">
+                        <!-- Populated dynamically based on selected movie + date -->
+                    </div>
+                </div>
+
+                <!-- Interactive Seat Map -->
+                <div class="seat-selection">
+                    <h3 id="screenLabel">Screen</h3>
+                    <div class="screen">SCREEN</div>
+                    <div id="seatGrid" class="seat-grid">
+                        <!-- Seat layout dynamically generated by app.js -->
+                    </div>
+                    <div class="seat-legend">
+                        <span class="legend-item"><span class="seat available"></span> Available</span>
+                        <span class="legend-item"><span class="seat selected"></span> Selected</span>
+                        <span class="legend-item"><span class="seat occupied"></span> Occupied</span>
+                    </div>
+                </div>
+
+                <!-- Ticket type per seat (drives the child/senior discount) -->
+                <div id="ticketTypes" class="ticket-types"></div>
+
+                <!-- Checkout Summary -->
+                <div class="booking-summary">
+                    <p><strong>Selected Seats:</strong> <span id="selectedSeatNo">None</span></p>
+                    <p><strong>Total Price:</strong> ₹<span id="totalPrice">0.00</span></p>
+                    <button id="confirmBookingBtn" disabled onclick="confirmBooking()">Confirm & Pay</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sign-in modal -->
+        <section id="signInModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-labelledby="signInTitle">
+            <div class="account-modal-content">
+                <button class="account-close-btn" type="button" data-close-account aria-label="Close sign-in">&times;</button>
+                <p class="eyebrow">Your cinema account</p>
+                <h2 id="signInTitle">Welcome back.</h2>
+                <p class="account-intro">Sign in to keep your bookings, preferences, and recommendations together.</p>
+                <form id="signInForm" class="account-form">
+                    <label for="signInName">Name</label>
+                    <input id="signInName" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+                    <label for="signInEmail">Email</label>
+                    <input id="signInEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                    <label for="signInPassword">Password</label>
+                    <input id="signInPassword" name="password" type="password" autocomplete="current-password" placeholder="Minimum 6 characters" minlength="6" required>
+                    <button class="account-submit" type="submit">Continue</button>
+                    <p id="signInMessage" class="account-message" role="status"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Profile modal -->
+        <section id="profileModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+            <div class="account-modal-content profile-content">
+                <button class="account-close-btn" type="button" data-close-account aria-label="Close profile">&times;</button>
+                <div class="profile-heading">
+                    <span id="profileModalAvatar" class="profile-large-avatar">U</span>
+                    <div><p class="eyebrow">Member profile</p><h2 id="profileTitle">Complete your profile.</h2></div>
+                </div>
+                <p class="account-intro">Add your personal, contact, and location details here. You can save this profile before signing in.</p>
+                <form id="profileForm" class="account-form">
+                    <label for="profileUsername">Username</label>
+                    <input id="profileUsername" name="username" type="text" autocomplete="username" required>
+                    <label for="profileFullName">Full name</label>
+                    <input id="profileFullName" name="name" type="text" autocomplete="name" required>
+                    <label for="profileEmail">Email</label>
+                    <input id="profileEmail" name="email" type="email" autocomplete="email" required>
+                    <div class="profile-password-status"><span>Password</span><strong>••••••••</strong><small>Hidden for security</small></div>
+                    <label for="profileNewPassword">Change password</label>
+                    <input id="profileNewPassword" name="newPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Leave blank to keep current password">
+                    <div class="profile-two-column">
+                        <div><label for="profileDob">Date of birth</label><input id="profileDob" name="dob" type="date"></div>
+                        <div><label for="profileAge">Age</label><input id="profileAge" name="age" type="number" readonly placeholder="Auto-calculated"></div>
+                    </div>
+                    <label for="profileGender">Gender</label>
+                    <select id="profileGender" name="gender">
+                        <option value="">Prefer not to say</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Other</option>
+                    </select>
+                    <div class="profile-phone-grid">
+                        <div><label for="profileCountryCode">Country code</label><input id="profileCountryCode" name="countryCode" type="text" inputmode="tel" placeholder="+91"></div>
+                        <div><label for="profileAreaCode">Area code</label><input id="profileAreaCode" name="areaCode" type="text" inputmode="tel" placeholder="STD code"></div>
+                        <div><label for="profilePhoneNumber">Phone number</label><input id="profilePhoneNumber" name="phoneNumber" type="tel" inputmode="tel" placeholder="Number"></div>
+                    </div>
+                    <label for="profileCountry">Country</label>
+                    <input id="profileCountry" name="country" type="text" placeholder="Country">
+                    <div class="profile-two-column">
+                        <div><label for="profileState">State</label><input id="profileState" name="state" type="text" placeholder="State"></div>
+                        <div><label for="profileCity">City</label><input id="profileCity" name="city" type="text" placeholder="City"></div>
+                    </div>
+                    <label for="profilePostalCode">Area code / postal code</label>
+                    <input id="profilePostalCode" name="postalCode" type="text" inputmode="numeric" placeholder="Postal code">
+                    <label for="profileGenre">Favourite genre</label>
+                    <select id="profileGenre" name="genre">
+                        <option value="">Choose a preference</option>
+                        <option>Action</option><option>Animation</option><option>Documentary</option><option>Drama</option><option>Science fiction</option>
+                    </select>
+                    <button class="account-submit" type="submit">Save profile</button>
+                    <button id="signOutBtn" class="account-secondary" type="button">Sign out</button>
+                    <p id="profileMessage" class="account-message" role="status"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Movie Booking System | Database & Systems Architecture</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="app.js?v=receipt-3"></script>
+</body>
+</html>
