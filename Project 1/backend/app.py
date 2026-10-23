@@ -15,9 +15,18 @@ except ImportError:  # Helpful message when dependencies are not installed yet.
     mysql = None
     Error = Exception
 
-ROOT = Path(__file__).resolve().parents[1]
-load_dotenv(ROOT / ".env")
-app = Flask(__name__, static_folder=str(ROOT), static_url_path="")
+BACKEND_DIR = Path(__file__).resolve().parent
+ROOT = BACKEND_DIR.parent
+FRONTEND_DIR = ROOT / "frontend"
+
+if (BACKEND_DIR / ".env").exists():
+    load_dotenv(BACKEND_DIR / ".env")
+elif (ROOT / ".env").exists():
+    load_dotenv(ROOT / ".env")
+else:
+    load_dotenv()
+
+app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change-this-development-secret")
 
 
@@ -69,7 +78,7 @@ def current_user_id():
 
 @app.get("/")
 def index():
-    return send_from_directory(ROOT, "index.html")
+    return send_from_directory(FRONTEND_DIR, "index.html")
 
 
 @app.get("/api/health")
