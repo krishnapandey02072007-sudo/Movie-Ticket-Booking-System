@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket Booking System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo">
+            <h1>Cinema<span>Booking</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" id="navMovies" class="active">Movies</a></li>
+                <li><a href="#" id="navBookings">My Bookings</a></li>
+                <li><a href="#" id="navAdmin">Admin &amp; DB Analytics</a></li>
+            </ul>
+        </nav>
+        <div class="account-actions">
+            <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch colour theme" aria-pressed="false">
+                <span id="themeIcon">☾</span><span id="themeLabel">Dark</span>
+            </button>
+            <button id="profileBtn" class="profile-btn" type="button" aria-label="Open my profile">
+                <span id="profileAvatar">U</span>
+                <span id="profileName">My Profile</span>
+            </button>
+            <button id="signInBtn" class="sign-in-btn" type="button">Sign in</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        <!-- Movies page -->
+        <div id="moviesPage">
+
+            <!-- Search & Filter Section -->
+            <section class="filter-section">
+                <h2>Now Showing</h2>
+                <div class="filter-controls">
+                    <input type="text" id="searchInput" placeholder="Search by movie title...">
+                    <select id="languageFilter">
+                        <option value="ALL">All Languages</option>
+                        <!-- Other options are generated from the movie data in app.js -->
+                    </select>
+                    <select id="typeFilter">
+                        <option value="ALL">All Types</option>
+                        <!-- Other options are generated from the movie data in app.js -->
+                    </select>
+                </div>
+            </section>
+
+            <!-- Movie Catalog Row -->
+            <div class="movie-row-wrap">
+                <button class="scroll-arrow prev" data-target="movies" aria-label="Scroll left">&#8249;</button>
+                <section id="movies" class="movie-grid">
+                    <!-- Dynamically populated via app.js -->
+                    <p class="loading-text">Loading movies...</p>
+                </section>
+                <button class="scroll-arrow next" data-target="movies" aria-label="Scroll right">&#8250;</button>
+            </div>
+
+            <!-- Recommended For You (Powered by Neo4j Multi-Hop Graph Traversal) -->
+            <section class="movie-row-section">
+                <div class="row-header-wrap">
+                    <h2 class="row-title">Recommended For You</h2>
+                    <span class="graph-badge"><span class="badge-dot"></span> Neo4j Graph Collaborative Traversal</span>
+                </div>
+                <div class="movie-row-wrap">
+                    <button class="scroll-arrow prev" data-target="recommendedGrid" aria-label="Scroll left">&#8249;</button>
+                    <div id="recommendedGrid" class="movie-grid">
+                        <p class="loading-text">Loading recommendations from Neo4j graph...</p>
+                    </div>
+                    <button class="scroll-arrow next" data-target="recommendedGrid" aria-label="Scroll right">&#8250;</button>
+                </div>
+            </section>
+
+            <!-- Popular Now (ranked by vote count) -->
+            <section class="movie-row-section">
+                <h2 class="row-title">Popular Now</h2>
+                <div class="movie-row-wrap">
+                    <button class="scroll-arrow prev" data-target="popularGrid" aria-label="Scroll left">&#8249;</button>
+                    <div id="popularGrid" class="movie-grid">
+                        <p class="loading-text">Loading...</p>
+                    </div>
+                    <button class="scroll-arrow next" data-target="popularGrid" aria-label="Scroll right">&#8250;</button>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- My Bookings page -->
+        <div id="my-bookings" class="hidden">
+            <section class="filter-section">
+                <h2>My Bookings</h2>
+            </section>
+            <section id="bookingsList">
+                <p class="loading-text">You have no bookings yet.</p>
+            </section>
+        </div>
+
+        <!-- Admin & Database Analytics Page -->
+        <div id="adminPage" class="hidden">
+            <section class="filter-section">
+                <h2>Database Analytics &amp; Admin Console</h2>
+                <div class="db-badge">
+                    <span class="db-status-dot"></span>
+                    <strong>Relational:</strong> Oracle 21c XE | <strong>Graph Engine:</strong> Neo4j 5.x | <strong>Architecture:</strong> Polyglot Persistence
+                </div>
+            </section>
+
+            <!-- Key Metrics Overview -->
+            <div class="admin-stats-grid">
+                <div class="stat-card">
+                    <span class="stat-icon">💰</span>
+                    <div class="stat-info">
+                        <small>Total Gross Revenue</small>
+                        <h3 id="statTotalRevenue">₹0.00</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🎟️</span>
+                    <div class="stat-info">
+                        <small>Total Confirmed Bookings</small>
+                        <h3 id="statTotalBookings">0</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">⚡</span>
+                    <div class="stat-info">
+                        <small>Database Triggers</small>
+                        <h3>Active &amp; Enforced</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🕸️</span>
+                    <div class="stat-info">
+                        <small>Neo4j Graph Database</small>
+                        <h3 id="statNeo4jStatus">Active &amp; Traversed</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 1: Movie Performance & Financials -->
+            <section class="admin-section">
+                <h3>🎬 Movie Performance &amp; Revenue View (<code>V_MOVIE_PERFORMANCE</code>)</h3>
+                <div class="table-responsive">
+                    <table class="admin-table" id="moviePerfTable">
+                        <thead>
+                            <tr>
+                                <th>Movie Title</th>
+                                <th>Language</th>
+                                <th>Genre</th>
+                                <th>Rating</th>
+                                <th>Bookings</th>
+                                <th>Tickets Sold</th>
+                                <th>Gross Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moviePerfBody">
+                            <tr><td colspan="7">Loading analytical view...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- View 2: Active Shows & Seat Occupancy -->
+            <section class="admin-section">
+                <h3>🪑 Real-Time Show Occupancy View (<code>V_ACTIVE_SHOWS</code>)</h3>
+                <div class="table-responsive">
+                    <table class="admin-table" id="activeShowsTable">
+                        <thead>
+                            <tr>
+                                <th>Show ID</th>
+                                <th>Movie</th>
+                                <th>Screen</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Booked / Total</th>
+                                <th>Available</th>
+                                <th>Occupancy</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activeShowsBody">
+                            <tr><td colspan="8">Loading active shows...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section: Neo4j Graph Database & Polyglot Persistence -->
+            <section class="admin-section neo4j-admin-card">
+                <div class="section-header-row">
+                    <div>
+                        <h3>🕸️ Neo4j Graph Engine &amp; Polyglot Persistence Dashboard</h3>
+                        <p class="section-desc">Enterprise hybrid architecture pairing Oracle 21c ACID relational transactions with Neo4j Property Graph traversals.</p>
+                    </div>
+                    <button id="btnSyncNeo4j" class="btn-sync-neo4j" onclick="syncNeo4jGraph()">
+                        <span>↻ Sync Oracle ➔ Neo4j Graph</span>
+                    </button>
+                </div>
+
+                <div class="neo4j-metrics-grid">
+                    <div class="neo-metric-box">
+                        <span class="neo-metric-title">Graph Node Entities</span>
+                        <div class="neo-metric-val" id="neoNodesCount">28</div>
+                        <small class="neo-metric-sub">:User (7), :Movie (14), :Genre (7)</small>
+                    </div>
+                    <div class="neo-metric-box">
+                        <span class="neo-metric-title">Graph Directed Relationships</span>
+                        <div class="neo-metric-val" id="neoEdgesCount">46</div>
+                        <small class="neo-metric-sub">:RATED, :BOOKED, :IN_GENRE</small>
+                    </div>
+                    <div class="neo-metric-box">
+                        <span class="neo-metric-title">Connection Endpoint</span>
+                        <div class="neo-metric-val" id="neoEndpoint">bolt://localhost:7687</div>
+                        <small class="neo-metric-sub" id="neoMode">Transactional Cypher HTTP / Bolt API</small>
+                    </div>
+                    <div class="neo-metric-box">
+                        <span class="neo-metric-title">Last Graph Reconciliation</span>
+                        <div class="neo-metric-val" id="neoSyncTime" style="font-size: 1.05rem; padding-top: 6px;">Synchronized</div>
+                        <small class="neo-metric-sub" id="neoSyncDetail">Oracle 21c BCNF tables ➔ Property Graph</small>
+                    </div>
+                </div>
+
+                <!-- Cypher Query Inspector -->
+                <div class="cypher-inspector">
+                    <div class="cypher-header">
+                        <h4>🔍 Live Multi-Hop Collaborative Filtering Cypher Query</h4>
+                        <span class="cypher-tag">Cypher 5.x</span>
+                    </div>
+                    <pre class="cypher-code"><code>MATCH (me:User {id: $userId})
+MATCH (similar:User)-[simEdge]->(common:Movie)&lt;-[myEdge]-(me)
+WHERE (type(simEdge) IN ['RATED', 'BOOKED']) AND (type(myEdge) IN ['RATED', 'BOOKED'])
+MATCH (similar)-[recEdge:RATED]->(rec:Movie)
+WHERE recEdge.rating >= 4.0
+  AND NOT (me)-[:RATED]->(rec)
+  AND NOT (me)-[:BOOKED]->(rec)
+RETURN rec.title, count(DISTINCT similar) AS graphMatchScore, collect(DISTINCT common.title) AS sharedTaste
+ORDER BY graphMatchScore DESC LIMIT 5;</code></pre>
+                </div>
+            </section>
+
+            <!-- Audit Trail Log -->
+            <section class="admin-section">
+                <h3>📋 Enterprise Booking Audit Trail (Trigger: <code>TRG_AUDIT_BOOKING_STATUS</code>)</h3>
+                <div class="table-responsive">
+                    <table class="admin-table" id="auditTable">
+                        <thead>
+                            <tr>
+                                <th>Log ID</th>
+                                <th>Booking ID</th>
+                                <th>Action</th>
+                                <th>Old Status</th>
+                                <th>New Status</th>
+                                <th>Timestamp</th>
+                                <th>Audit Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditBody">
+                            <tr><td colspan="7">Loading audit trail...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Showtime & Seat Selection Modal -->
+        <section id="bookingModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalMovieTitle">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeBookingModal()">&times;</span>
+                <h2 id="modalMovieTitle">Select Showtime & Seats</h2>
+
+                <!-- Date Picker (for advance booking) -->
+                <div class="date-selection">
+                    <h3>Select date</h3>
+                    <div id="dateList" class="date-buttons">
+                        <!-- Populated dynamically: today + next few days -->
+                    </div>
+                </div>
+
+                <!-- Showtimes Container -->
+                <div class="showtime-selection">
+                    <h3>Available Showtimes</h3>
+                    <div id="showtimeList" class="showtime-buttons">
+                        <!-- Populated dynamically based on selected movie + date -->
+                    </div>
+                </div>
+
+                <!-- Interactive Seat Map -->
+                <div class="seat-selection">
+                    <h3 id="screenLabel">Screen</h3>
+                    <div class="screen">SCREEN</div>
+                    <div id="seatGrid" class="seat-grid">
+                        <!-- Seat layout dynamically generated by app.js -->
+                    </div>
+                    <div class="seat-legend">
+                        <span class="legend-item"><span class="seat available"></span> Available</span>
+                        <span class="legend-item"><span class="seat selected"></span> Selected</span>
+                        <span class="legend-item"><span class="seat occupied"></span> Occupied</span>
+                    </div>
+                </div>
+
+                <!-- Ticket type per seat (drives the child/senior discount) -->
+                <div id="ticketTypes" class="ticket-types"></div>
+
+                <!-- Checkout Summary -->
+                <div class="booking-summary">
+                    <p><strong>Selected Seats:</strong> <span id="selectedSeatNo">None</span></p>
+                    <p><strong>Total Price:</strong> ₹<span id="totalPrice">0.00</span></p>
+                    <button id="confirmBookingBtn" disabled onclick="confirmBooking()">Confirm & Pay</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Seat Modal (Modify seats with ₹40/seat modification fee via Oracle SP_EDIT_TICKET_SEAT) -->
+        <section id="editSeatModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="editSeatModalTitle">
+            <div class="modal-content edit-seat-modal-content">
+                <span class="close-btn" onclick="closeEditSeatModal()">&times;</span>
+                <p class="eyebrow">Enterprise Ticket Management &bull; Stored Procedure SP_EDIT_TICKET_SEAT</p>
+                <h2 id="editSeatModalTitle">Edit Booking Seats</h2>
+                
+                <div class="edit-booking-header" id="editBookingHeader">
+                    <!-- Populated dynamically: Movie title, date, time, screen, current seats badge -->
+                </div>
+
+                <!-- Interactive Seat Map -->
+                <div class="seat-selection">
+                    <h3 id="editScreenLabel">Screen</h3>
+                    <div class="screen">SCREEN</div>
+                    <div id="editSeatGrid" class="seat-grid">
+                        <!-- Dynamic seat layout generated by app.js -->
+                    </div>
+                    <div class="seat-legend">
+                        <span class="legend-item"><span class="seat current"></span> Current Seat</span>
+                        <span class="legend-item"><span class="seat selected"></span> New Selection</span>
+                        <span class="legend-item"><span class="seat available"></span> Available</span>
+                        <span class="legend-item"><span class="seat occupied"></span> Occupied</span>
+                    </div>
+                </div>
+
+                <!-- Modification Fee & Cost Summary Callout -->
+                <div class="edit-seat-summary-box">
+                    <div class="edit-fee-banner">
+                        <span class="edit-fee-icon">⚡</span>
+                        <div>
+                            <strong>Seat Modification Policy (₹40 Extra per Seat)</strong>
+                            <p>You can change your seat(s) for <strong>₹40 per seat extra</strong> modification fee. The fee is charged and recorded via Oracle stored procedure <code>SP_EDIT_TICKET_SEAT</code>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="edit-cost-breakdown">
+                        <div class="edit-cost-row">
+                            <span>Original Seats:</span>
+                            <strong id="editOldSeatsLabel">None</strong>
+                        </div>
+                        <div class="edit-cost-row">
+                            <span>New Selected Seats:</span>
+                            <strong id="editNewSeatsLabel">None</strong>
+                        </div>
+                        <div class="edit-cost-row">
+                            <span>Seats Changed:</span>
+                            <strong id="editChangedCountLabel">0 seat(s)</strong>
+                        </div>
+                        <div class="edit-cost-row fee-row">
+                            <span>Modification Fee (₹40 / seat):</span>
+                            <strong id="editFeeAmountLabel">₹0.00</strong>
+                        </div>
+                    </div>
+
+                    <p id="editSeatMessage" class="account-message" role="status"></p>
+
+                    <div class="edit-modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeEditSeatModal()">Cancel</button>
+                        <button type="button" id="btnConfirmEditSeat" class="btn-edit-pay" onclick="proceedToEditSeatPayment()" disabled>
+                            Pay ₹0.00 &amp; Confirm Seats
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manual UPI checkout: payment is reported by the customer and reviewed manually -->
+        <section id="manualPaymentModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="manualPaymentTitle">
+            <div class="modal-content manual-payment-content">
+                <button class="close-btn" type="button" onclick="closeManualPayment()" aria-label="Close payment">&times;</button>
+                <p class="eyebrow">Manual UPI payment</p>
+                <h2 id="manualPaymentTitle">Scan and pay</h2>
+                <p>Pay the exact amount below to this UPI ID. This app cannot verify your transfer; the cinema will need to check it manually.</p>
+                <div class="manual-payment-amount" id="manualPaymentAmount">₹0.00</div>
+                <img id="manualPaymentQr" class="manual-payment-qr" src="assets/payment-qr.png" alt="BHIM UPI payment QR code">
+                <p class="manual-payment-upi">UPI ID: <strong id="manualPaymentUpiId">rrr97971@upi</strong></p>
+                <a id="manualPaymentLink" class="manual-payment-link hidden" href="#">Open UPI app</a>
+                <label for="manualPaymentReference">UPI transaction reference / UTR (optional)</label>
+                <input id="manualPaymentReference" type="text" maxlength="100" autocomplete="off" placeholder="Enter the reference from your UPI receipt">
+                <p id="manualPaymentMessage" class="account-message" role="status"></p>
+                <div class="manual-payment-actions">
+                    <button class="btn-edit" type="button" onclick="closeManualPayment()">Cancel</button>
+                    <button id="manualPaymentSubmit" type="button" onclick="completeManualPayment()" disabled>I've paid — record booking</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Running-late dialog: switch to the closest show or take a refund (content rendered by app.js) -->
+        <section id="lateModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="lateTitle">
+            <div class="modal-content late-modal-content">
+                <span class="close-btn" onclick="closeLateModal()" role="button" aria-label="Close">&times;</span>
+                <div id="lateBody"></div>
+            </div>
+        </section>
+
+        <!-- Sign-in modal -->
+        <section id="signInModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-labelledby="signInTitle">
+            <div class="account-modal-content">
+                <button class="account-close-btn" type="button" data-close-account aria-label="Close sign-in">&times;</button>
+                <p class="eyebrow">Your cinema account</p>
+                <h2 id="signInTitle">Welcome back.</h2>
+                <p class="account-intro">Demo sign-in only: no password is checked. Enter a name and email to use the booking demo.</p>
+                <form id="signInForm" class="account-form">
+                    <label for="signInName">Name</label>
+                    <input id="signInName" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+                    <label for="signInEmail">Email</label>
+                    <input id="signInEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                    <label for="signInPassword">Demo password (optional)</label>
+                    <input id="signInPassword" name="password" type="password" autocomplete="off" placeholder="Not checked">
+                    <button class="account-submit" type="submit">Continue as demo</button>
+                    <p id="signInMessage" class="account-message" role="status"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Profile modal -->
+        <section id="profileModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+            <div class="account-modal-content profile-content">
+                <button class="account-close-btn" type="button" data-close-account aria-label="Close profile">&times;</button>
+                <div class="profile-heading">
+                    <span id="profileModalAvatar" class="profile-large-avatar">U</span>
+                    <div><p class="eyebrow">Member profile</p><h2 id="profileTitle">Complete your profile.</h2></div>
+                </div>
+                <p class="account-intro">Add your personal, contact, and location details here. You can save this profile before signing in.</p>
+                <form id="profileForm" class="account-form">
+                    <label for="profileUsername">Username</label>
+                    <input id="profileUsername" name="username" type="text" autocomplete="username" required>
+                    <label for="profileFullName">Full name</label>
+                    <input id="profileFullName" name="name" type="text" autocomplete="name" required>
+                    <label for="profileEmail">Email</label>
+                    <input id="profileEmail" name="email" type="email" autocomplete="email" required>
+                    <div class="profile-password-status"><span>Password</span><strong>••••••••</strong><small>Hidden for security</small></div>
+                    <label for="profileNewPassword">Change password</label>
+                    <input id="profileNewPassword" name="newPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Leave blank to keep current password">
+                    <div class="profile-two-column">
+                        <div><label for="profileDob">Date of birth</label><input id="profileDob" name="dob" type="date"></div>
+                        <div><label for="profileAge">Age</label><input id="profileAge" name="age" type="number" readonly placeholder="Auto-calculated"></div>
+                    </div>
+                    <label for="profileGender">Gender</label>
+                    <select id="profileGender" name="gender">
+                        <option value="">Prefer not to say</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Other</option>
+                    </select>
+                    <div class="profile-phone-grid">
+                        <div><label for="profileCountryCode">Country code</label><input id="profileCountryCode" name="countryCode" type="text" inputmode="tel" placeholder="+91"></div>
+                        <div><label for="profileAreaCode">Area code</label><input id="profileAreaCode" name="areaCode" type="text" inputmode="tel" placeholder="STD code"></div>
+                        <div><label for="profilePhoneNumber">Phone number</label><input id="profilePhoneNumber" name="phoneNumber" type="tel" inputmode="tel" placeholder="Number"></div>
+                    </div>
+                    <label for="profileCountry">Country</label>
+                    <input id="profileCountry" name="country" type="text" placeholder="Country">
+                    <div class="profile-two-column">
+                        <div><label for="profileState">State</label><input id="profileState" name="state" type="text" placeholder="State"></div>
+                        <div><label for="profileCity">City</label><input id="profileCity" name="city" type="text" placeholder="City"></div>
+                    </div>
+                    <label for="profilePostalCode">Area code / postal code</label>
+                    <input id="profilePostalCode" name="postalCode" type="text" inputmode="numeric" placeholder="Postal code">
+                    <label for="profileGenre">Favourite genre</label>
+                    <select id="profileGenre" name="genre">
+                        <option value="">Choose a preference</option>
+                        <option>Action</option><option>Animation</option><option>Documentary</option><option>Drama</option><option>Science fiction</option>
+                    </select>
+                    <button class="account-submit" type="submit">Save profile</button>
+                    <button id="signOutBtn" class="account-secondary" type="button">Sign out</button>
+                    <p id="profileMessage" class="account-message" role="status"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Movie Booking System | Database & Systems Architecture</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="app.js?v=edit-seat-fee-40"></script>
+</body>
+</html>
