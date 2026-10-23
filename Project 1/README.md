@@ -16,18 +16,24 @@ CinemaBooking is a movie booking and recommendation dashboard developed as a ful
 ## Project Structure
 
 ```text
-.
-├── index.html                 # Existing dashboard UI
-├── app.js                    # Existing frontend logic plus API integration
-├── styles.css                # Existing visual design
-├── mock-movies.json           # Offline fallback catalog
-├── database.sql               # MySQL schema and seed data
-├── backend/
-│   ├── app.py                 # Flask API and static-file server
-│   └── requirements.txt       # Python dependencies
-├── assets/                    # Existing poster/vendor assets, if present
-├── .env.example               # Database configuration template
-└── .gitignore
+Project 1/
+├── frontend/                  # HTML, CSS, client-side JS & assets
+│   ├── assets/                # Movie posters & vendor libraries
+│   │   ├── posters/
+│   │   └── vendor/
+│   ├── app.js                 # Frontend application logic & API calls
+│   ├── index.html             # Dashboard UI
+│   ├── mock-movies.json       # Offline fallback movie catalog
+│   └── styles.css             # Visual design & responsive layout
+├── backend/                   # Python Flask API
+│   ├── app.py                 # Flask server & API routes
+│   ├── requirements.txt       # Python dependencies
+│   └── .env.example           # Environment template
+├── database/                  # Database scripts
+│   └── database.sql           # MySQL schema & seed data
+├── .env.example               # Root database configuration template
+├── .gitignore                 # Git ignore rules
+└── README.md                  # Project documentation
 ```
 
 ## Features
@@ -64,7 +70,7 @@ export SECRET_KEY=development-secret-change-me
 Initialize the database:
 
 ```bash
-mysql -u root -p < database.sql
+mysql -u root -p < database/database.sql
 ```
 
 Start the application from the project root:

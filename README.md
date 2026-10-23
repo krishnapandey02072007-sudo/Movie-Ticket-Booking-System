@@ -16,18 +16,24 @@ CinemaBooking is a movie booking and recommendation dashboard developed as a ful
 ## Project Structure
 
 ```text
-.
-├── index.html                 # Existing dashboard UI
-├── app.js                    # Existing frontend logic plus API integration
-├── styles.css                # Existing visual design
-├── mock-movies.json           # Offline fallback catalog
-├── database.sql               # MySQL schema and seed data
-├── backend/
-│   ├── app.py                 # Flask API and static-file server
-│   └── requirements.txt       # Python dependencies
-├── assets/                    # Existing poster/vendor assets, if present
-├── .env.example               # Database configuration template
-└── .gitignore
+Project 1/
+├── frontend/                  # HTML, CSS, client-side JS & assets
+│   ├── assets/                # Movie posters & vendor libraries
+│   │   ├── posters/
+│   │   └── vendor/
+│   ├── app.js                 # Frontend application logic & API calls
+│   ├── index.html             # Dashboard UI
+│   ├── mock-movies.json       # Offline fallback movie catalog
+│   └── styles.css             # Visual design & responsive layout
+├── backend/                   # Python Flask API
+│   ├── app.py                 # Flask server & API routes
+│   ├── requirements.txt       # Python dependencies
+│   └── .env.example           # Environment template
+├── database/                  # Database scripts
+│   └── database.sql           # MySQL schema & seed data
+├── .env.example               # Root database configuration template
+├── .gitignore                 # Git ignore rules
+└── README.md                  # Project documentation
 ```
 
 ## Features
@@ -38,36 +44,37 @@ The backend adds persistent users, password hashing, a movie catalog, generated 
 
 ## Prerequisites
 
-Install Python 3.10+ and MySQL 8+. Create a MySQL user that can create or use the `cinema\\\\\\\\\\\\\\\_booking` database. The project does not require MongoDB, Oracle, JDBC, or a separate Node.js server.
+Install Python 3.10+ and MySQL 8+. Create a MySQL user that can create or use the `cinema_booking` database. The project does not require MongoDB, Oracle, JDBC, or a separate Node.js server.
 
 ## Setup
 
-From the project root:
+Navigate into the project directory:
 
 ```bash
+cd "Project 1"
 python3 -m venv .venv
-source .venv/bin/activate       # Windows: .venv\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Scripts\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\activate
+source .venv/bin/activate       # Windows: .venv\Scripts\activate
 pip install -r backend/requirements.txt
 ```
 
 Copy `.env.example` to `.env` and set the MySQL password. The Flask app reads environment variables; for a simple local demonstration, export them directly:
 
 ```bash
-export DB\\\\\\\\\\\\\\\_HOST=127.0.0.1
-export DB\\\\\\\\\\\\\\\_PORT=3306
-export DB\\\\\\\\\\\\\\\_USER=root
-export DB\\\\\\\\\\\\\\\_PASSWORD=your\\\\\\\\\\\\\\\_mysql\\\\\\\\\\\\\\\_password
-export DB\\\\\\\\\\\\\\\_NAME=cinema\\\\\\\\\\\\\\\_booking
-export SECRET\\\\\\\\\\\\\\\_KEY=development-secret-change-me
+export DB_HOST=127.0.0.1
+export DB_PORT=3306
+export DB_USER=root
+export DB_PASSWORD=your_mysql_password
+export DB_NAME=cinema_booking
+export SECRET_KEY=development-secret-change-me
 ```
 
 Initialize the database:
 
 ```bash
-mysql -u root -p < database.sql
+mysql -u root -p < database/database.sql
 ```
 
-Start the application from the project root:
+Start the application from the `Project 1` folder:
 
 ```bash
 python3 backend/app.py
@@ -94,15 +101,15 @@ Open **http://localhost:5000**. Do not open `index.html` with a double click: th
 |GET|`/api/movies`|Return the catalog|
 |POST|`/api/auth/signin`|Create or authenticate a user session|
 |POST|`/api/auth/signout`|Clear the session|
-|GET|`/api/showtimes/<movie\\\\\\\\\\\\\\\_id>`|Return seeded showtimes for a date|
-|GET|`/api/showtimes/<movie\\\\\\\\\\\\\\\_id>/<show\\\\\\\\\\\\\\\_id>/occupied`|Return reserved seats|
+|GET|`/api/showtimes/<movie_id>`|Return seeded showtimes for a date|
+|GET|`/api/showtimes/<movie_id>/<show_id>/occupied`|Return reserved seats|
 |GET|`/api/bookings`|Return current user's bookings|
 |POST|`/api/bookings`|Create a booking and reserve seats|
-|DELETE|`/api/bookings/<booking\\\\\\\\\\\\\\\_id>`|Mark a user's booking cancelled|
+|DELETE|`/api/bookings/<booking_id>`|Mark a user's booking cancelled|
 
 ## Database Design
 
-`users` stores accounts; `movies` stores the catalog; `showtimes` stores scheduled screenings; `bookings` stores booking headers and status; and `booking\\\\\\\_seats` stores one row per selected seat and ticket type. Foreign keys and a transaction protect booking integrity. `active\\\\\\\\\\\\\\\_bookings` is a convenience view for confirmed bookings.
+`users` stores accounts; `movies` stores the catalog; `showtimes` stores scheduled screenings; `bookings` stores booking headers and status; and `booking_seats` stores one row per selected seat and ticket type. Foreign keys and a transaction protect booking integrity. `active_bookings` is a convenience view for confirmed bookings.
 
 ## Future Work
 
