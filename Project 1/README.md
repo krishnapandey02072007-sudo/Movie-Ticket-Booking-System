@@ -1,130 +1,162 @@
-# CinemaBooking Full-Stack Movie Booking System
+# CinemaBooking — Full-Stack Movie Ticket Booking System (Project 1)
 
-CinemaBooking is a movie booking and recommendation dashboard developed as a full-stack academic project. The existing HTML, CSS, and JavaScript interface is preserved, while a Python Flask API and MySQL database provide persistent users, movies, showtimes, bookings, ticket types, and seat reservations.
+CinemaBooking is a full-stack movie booking and recommendation platform built with a Python Flask REST API, MySQL relational database, and responsive vanilla HTML5, CSS3, and JavaScript frontend.
+
+---
 
 ## Technology Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | HTML5, CSS3, vanilla JavaScript |
-| Backend | Python 3, Flask |
-| Database | MySQL 8+ |
-| Database driver | `mysql-connector-python` |
-| PDF receipt | jsPDF in the browser |
-| Authentication | Flask session with password hashing |
+| **Frontend** | HTML5, CSS3, Vanilla JavaScript (ES6+) |
+| **Backend** | Python 3.10+, Flask |
+| **Database** | MySQL 8.0+ |
+| **Database Driver** | `mysql-connector-python` |
+| **PDF Generation** | jsPDF (browser client) |
+| **Authentication** | Flask session with Werkzeug password hashing |
+
+---
 
 ## Project Structure
 
 ```text
 Project 1/
-├── frontend/                  # HTML, CSS, client-side JS & assets
+├── frontend/                  # Client-side user interface
 │   ├── assets/                # Movie posters & vendor libraries
-│   │   ├── posters/
-│   │   └── vendor/
-│   ├── app.js                 # Frontend application logic & API calls
-│   ├── index.html             # Dashboard UI
-│   ├── mock-movies.json       # Offline fallback movie catalog
-│   └── styles.css             # Visual design & responsive layout
-├── backend/                   # Python Flask API
-│   ├── app.py                 # Flask server & API routes
-│   ├── requirements.txt       # Python dependencies
-│   └── .env.example           # Environment template
-├── database/                  # Database scripts
-│   └── database.sql           # MySQL schema & seed data
+│   │   ├── posters/           # Poster images (JPG)
+│   │   └── vendor/            # Offline vendor scripts (jspdf.umd.min.js)
+│   ├── app.js                 # UI controllers, seat picker & REST API integration
+│   ├── index.html             # Main dashboard UI
+│   ├── mock-movies.json       # Fallback catalog when offline
+│   └── styles.css             # Glassmorphism styling and responsive layout
+├── backend/                   # Server-side API application
+│   ├── app.py                 # Flask server, route handlers & static file serving
+│   ├── requirements.txt       # Python package dependencies
+│   └── .env.example           # Backend environment configuration template
+├── database/                  # Relational database scripts
+│   └── database.sql           # MySQL database schema, constraints & seed data
 ├── .env.example               # Root database configuration template
-├── .gitignore                 # Git ignore rules
+├── .gitignore                 # Git ignore rules for virtualenvs and secrets
 └── README.md                  # Project documentation
 ```
 
-## Features
+---
 
-The frontend provides movie search, language and type filters, recommendations, popular movies, date and showtime selection, interactive seats, adult/child/senior ticket pricing, sign-in and profile forms, booking history, theme switching, and PDF receipt generation. When the Flask API is available, movie records, sign-in, bookings, and cancellations use MySQL. If the API is unavailable, the catalog and local booking behavior continue through the existing mock/local-storage fallback so the interface can still be demonstrated.
+## Core Features
 
-The backend adds persistent users, password hashing, a movie catalog, generated showtimes, user-specific booking history, ticket types, server-side duplicate-seat protection, cancellation status, and a health endpoint. The payment button remains a **simulation**: it records a booking but does not charge real money. A production deployment would require a payment provider and HTTPS.
+- **Movie Discovery:** Filter movies by language (English, Hindi, Tamil) and type, or search by title.
+- **Showtime & Seat Selection:** Interactive seat grid (A1–E8) with real-time status and row pricing.
+- **Multi-Tier Ticket Pricing:** Adult (full price), Child (20% discount), Senior (15% discount).
+- **Authentication & Profiles:** User registration and sign-in with password hashing (`generate_password_hash` / `check_password_hash`).
+- **Simulated Payment & Booking:** Confirms bookings, prevents duplicate seat reservations using database transactions, and generates client-side PDF booking receipts.
+- **Booking History & Cancellations:** View active bookings, cancel reservations, and edit seats.
+- **Graceful Offline Fallback:** If the backend database is unreachable, automatically falls back to local client state and `mock-movies.json` for live demo capability.
+
+---
 
 ## Prerequisites
 
-Install Python 3.10+ and MySQL 8+. Create a MySQL user that can create or use the `cinema_booking` database. The project does not require MongoDB, Oracle, JDBC, or a separate Node.js server.
+- **Python 3.10+**
+- **MySQL Server 8.0+**
+- A MySQL user account with permissions to create and manage the `cinema_booking` database.
 
-## Setup
+---
 
-From the project root:
+## Setup & Installation
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate       # Windows: .venv\\Scripts\\activate
-pip install -r backend/requirements.txt
-```
+### 1. Database Initialization
 
-Copy `.env.example` to `.env` and set the MySQL password. The Flask app reads environment variables; for a simple local demonstration, export them directly:
-
-```bash
-export DB_HOST=127.0.0.1
-export DB_PORT=3306
-export DB_USER=root
-export DB_PASSWORD=your_mysql_password
-export DB_NAME=cinema_booking
-export SECRET_KEY=development-secret-change-me
-```
-
-Initialize the database:
+From the `Project 1` folder, import the database schema and sample data:
 
 ```bash
 mysql -u root -p < database/database.sql
 ```
 
-Start the application from the project root:
+*(Enter your MySQL root password when prompted. This creates the `cinema_booking` database with tables and seed data).*
+
+### 2. Environment Configuration
+
+Copy the template `.env.example` to `.env` in the `Project 1` directory (or inside `backend/`):
 
 ```bash
-python3 backend/app.py
+cp .env.example .env
 ```
 
-Open **http://localhost:5000**. Do not open `index.html` with a double click: the Flask server supplies both the frontend and API routes.
+Configure your MySQL connection details inside `.env`:
 
-## Demonstration Flow
+```env
+SECRET_KEY=development-secret-change-me
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=cinema_booking
+PORT=5000
+```
 
-1. Open the dashboard and show the English, Hindi, and Tamil catalog.
-2. Use the language dropdown and search box.
-3. Open a movie, select a date, showtime, seats, and ticket types.
-4. Use **Sign in** with a name, email, and six-character password. A new email creates a user; an existing email checks the password.
-5. Click **Confirm & Pay**. This is a simulated payment and creates a MySQL booking.
-6. Open **My Bookings** and demonstrate the booking history, **Receipt PDF**, Edit, and Cancel actions.
-7. Refresh the browser and show that MySQL-backed bookings remain available for the signed-in session.
-8. Check **http://localhost:5000/api/health** to demonstrate database connectivity.
+### 3. Backend Setup
+
+Create a virtual environment and install the required dependencies:
+
+```bash
+cd "Project 1"
+python -m venv .venv
+```
+
+Activate the virtual environment:
+- **Windows (Command Prompt / PowerShell):**
+  ```cmd
+  .venv\Scripts\activate
+  ```
+- **macOS / Linux:**
+  ```bash
+  source .venv/bin/activate
+  ```
+
+Install dependencies:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+---
+
+## Running the Application
+
+From the `Project 1` directory with the virtual environment activated:
+
+```bash
+python backend/app.py
+```
+
+The application will start on:
+**http://localhost:5000**
+
+> [!NOTE]
+> Do not open `index.html` directly by double-clicking it. The Flask server serves both the frontend static assets and the `/api/*` endpoints.
+
+---
 
 ## API Summary
 
-| Method | Route | Purpose |
+| Method | Route | Description |
 |---|---|---|
-| GET | `/api/health` | Test Flask/MySQL connectivity |
-| GET | `/api/movies` | Return the catalog |
-| POST | `/api/auth/signin` | Create or authenticate a user session |
-| POST | `/api/auth/signout` | Clear the session |
-| GET | `/api/showtimes/<movie_id>` | Return seeded showtimes for a date |
-| GET | `/api/showtimes/<movie_id>/<show_id>/occupied` | Return reserved seats |
-| GET | `/api/bookings` | Return current user's bookings |
-| POST | `/api/bookings` | Create a booking and reserve seats |
-| DELETE | `/api/bookings/<booking_id>` | Mark a user's booking cancelled |
+| `GET` | `/api/health` | Test database connectivity status |
+| `GET` | `/api/movies` | Fetch the full movie catalog |
+| `POST` | `/api/auth/signin` | Sign in or register a user session |
+| `POST` | `/api/auth/signout` | Destroy the current session |
+| `GET` | `/api/showtimes/<movie_id>?date=YYYY-MM-DD` | Get available screenings for a movie |
+| `GET` | `/api/showtimes/<movie_id>/<show_id>/occupied` | Get reserved seat list for a showtime |
+| `GET` | `/api/bookings` | Retrieve bookings for the logged-in user |
+| `POST` | `/api/bookings` | Create a confirmed booking with reserved seats |
+| `DELETE` | `/api/bookings/<booking_id>` | Cancel a booking |
 
-## Database Design
+---
 
-`users` stores accounts; `movies` stores the catalog; `showtimes` stores scheduled screenings; `bookings` stores booking headers and status; and `booking_seats` stores one row per selected seat and ticket type. Foreign keys and a transaction protect booking integrity. `active_bookings` is a convenience view for confirmed bookings.
+## Database Schema Overview
 
-## GitHub Submission
-
-Create a repository, copy this complete project into it, and commit the source files. Do not commit `.env`, passwords, or private credentials.
-
-```bash
-git init
-git add .
-git commit -m "Build Flask MySQL cinema booking system"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-git push -u origin main
-```
-
-Then share the GitHub repository URL and ensure the instructor/team members have the required access. The repository should include this README and `database.sql` so the evaluator can recreate the database.
-
-## Limitations and Future Work
-
-The current project is suitable for a classroom demonstration. Payment is simulated, recommendations are still a lightweight frontend content-based feature, showtimes are seeded for seven days, and PDF files are generated in the browser. Future production work would add real payment verification, email tickets, stronger authorization, migrations, automated tests, deployment, and real-time seat locking.
+- **`users`**: Account records with `user_id`, `name`, `email` (unique), `password_hash`, and registration timestamp.
+- **`movies`**: Movie catalog with duration, language, genre, poster path, rating, and vote counts.
+- **`showtimes`**: Screen schedules (`show_id`, `movie_id`, `show_date`, `show_time`, `screen_name`, `price`).
+- **`bookings`**: Booking records linked by `user_id` and `movie_id`, tracking confirmation status (`CONFIRMED` / `CANCELLED`).
+- **`booking_seats`**: Individual seat reservations per booking (`seat_no`, `ticket_type`) with foreign key constraints.
