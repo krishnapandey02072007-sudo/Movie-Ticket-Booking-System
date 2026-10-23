@@ -16,3 +16,8 @@ Thumbs.db
 # IDEs
 .vscode/
 .idea/
+
+# Reports
+*REPORT*.md
+*report*.md
+DA3_REPORT.md
