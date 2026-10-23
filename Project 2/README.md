@@ -1,6 +1,6 @@
-# BookIt — Enterprise Movie Ticket Booking System (Project 2)
+# CinemaBooking — Enterprise Movie Ticket Booking System (Project 2)
 
-BookIt is an enterprise full-stack movie booking platform implementing a **Polyglot Persistence** architecture. The application combines **Oracle 21c Express Edition** for ACID relational transactions and concurrency control with **Neo4j 5.x** for graph-based collaborative filtering, bridged by a high-performance **pure Java JDBC** HTTP server.
+CinemaBooking is an enterprise full-stack movie booking platform implementing a **Polyglot Persistence** architecture. The application combines **Oracle 21c Express Edition** for ACID relational transactions and concurrency control with **Neo4j 5.x** for graph-based collaborative filtering, bridged by a high-performance **pure Java JDBC** HTTP server.
 
 ---
 
@@ -117,7 +117,7 @@ If running Neo4j Desktop or Docker (`neo4j:5` on port 7474 / 7687):
 cypher-shell -u neo4j -p neo4jpassword -f database/05_neo4j_setup.cypher
 ```
 
-*(Note: If Neo4j daemon is not installed, BookIt automatically activates its built-in In-Memory Graph Engine so graph recommendations and metrics operate without external dependencies).*
+*(Note: If Neo4j daemon is not installed, CinemaBooking automatically activates its built-in In-Memory Graph Engine so graph recommendations and metrics operate without external dependencies).*
 
 ---
 
